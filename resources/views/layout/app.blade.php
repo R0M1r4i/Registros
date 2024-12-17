@@ -28,9 +28,9 @@
 
         .logo img {
 
-            width: 200px; /* La imagen se ajustará al ancho del contenedor */
-            height: auto; /* Mantiene la proporción de la imagen */
-            object-fit: contain;
+            width: 160px; /* La imagen se ajustará al ancho del contenedor */
+
+            object-fit: cover;
         }
 
     </style>
@@ -47,10 +47,10 @@
             <div class="sidebar-header">
                 <div class="d-flex justify-content-between">
                     <div class="logo">
-                        <a href=""><img src="{{ asset('assets/images/logo/munihuancayo.png')}}" alt="Logo" class="img-fluid"></a>
+                        <a href=""><img src="{{ asset('assets/images/logo/logoOmar.png')}}" alt="Logo" class="img-fluid"></a>
                     </div>
                     <div class="toggler">
-                        <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                        <a href="{{ route('dashboard') }}" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
                     </div>
                 </div>
             </div>
@@ -60,7 +60,7 @@
                     <li class="sidebar-title">Menu</li>
 
                     <li class="sidebar-item active ">
-                        <a href="index.html" class='sidebar-link'>
+                        <a href="{{ route('dashboard') }}" class='sidebar-link'>
                             <i class="bi bi-grid-fill"></i>
                             <span>Dashboard</span>
                         </a>
@@ -161,17 +161,6 @@
 
 
 
-        <footer>
-            <div class="footer clearfix mb-0 text-muted">
-                <div class="float-start">
-                    <p>2024 &copy; Peralta</p>
-                </div>
-                <div class="float-end">
-                    <p>Creado con <span class="text-danger"><i class="bi bi-heart"></i></span> por <a
-                            href="">O. Peralta</a></p>
-                </div>
-            </div>
-        </footer>
 
     </div>
 </div>

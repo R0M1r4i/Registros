@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 
 class Matrimonio extends Model
 {
+
+    use HasFactory;
     protected $table = 'acta_matrimonio';
     protected $primaryKey = 'id';
 

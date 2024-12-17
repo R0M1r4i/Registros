@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActaDefuncionController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MatrimonioController;
 use App\Http\Controllers\NacimientoController;
 
@@ -33,6 +34,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+
+    // En web.php
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/actas-mensuales', [DashboardController::class, 'getActasMensuales']);
+    Route::get('/dashboard/totales-por-categoria', [DashboardController::class, 'getTotalesPorCategoria']);
+
+
 
     // Rutas para el editor (solo registros)
     Route::middleware(['role:editor'])->group(function () {

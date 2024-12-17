@@ -27,14 +27,14 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             // Autenticación exitosa, redirigir al dashboard
-            return redirect()->intended('nacimiento')->with('success', 'Inicio de sesión exitoso.');
+            return redirect()->intended('dashboard')->with('success', 'Inicio de sesión exitoso.');
         } else {
             // Si la autenticación falla, redirigir de vuelta con un error
             return redirect()->back()->withErrors('Credenciales incorrectas.');
         }
     }
 
-    // Manejar el logout
+
     public function logout(Request $request)
     {
         Auth::logout();
