@@ -12,6 +12,15 @@ class Handler extends ExceptionHandler
      *
      * @var array<class-string<\Throwable>, \Psr\Log\LogLevel::*>
      */
+
+    /**
+     * Render an exception into an HTTP response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Throwable  $exception
+     * @return \Illuminate\Http\Response
+     */
+
     protected $levels = [
         //
     ];
@@ -45,4 +54,12 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    public function render($request, Throwable $exception)
+    {
+        // Redirigir a la vista personalizada para todos los errores
+        return response()->view('error.index', ['error' => $exception->getMessage()], 500);
+    }
+
+
 }

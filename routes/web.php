@@ -25,7 +25,13 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 // Manejar el login
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
+Route::get('/validacion', function () {
+    return view('validacion.index');
+})->name('validacion.index');;
 
+Route::get('/validacion/vista', function () {
+    return view('validacion.vista');
+})->name('validacion.vista');;
 
 
 // Rutas privadas con autenticación

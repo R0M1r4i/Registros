@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\usuario;
-use App\Http\Controllers\Controller;
+
 use App\Http\Requests\StoreusuarioRequest;
 use App\Http\Requests\UpdateusuarioRequest;
 use Illuminate\Support\Facades\Hash;
@@ -32,17 +32,21 @@ class UsuarioController extends Controller
      */
     public function store(StoreusuarioRequest $request)
     {
-
         $usuario = new Usuario();
-        $usuario->usuario = $request->usuario;
-        $usuario->nombres = $request->nombres;
-        $usuario->apellidos = $request->apellidos;
+
+        // Sanitización y asignación de datos
+        $usuario->usuario = trim($request->usuario); // Eliminar espacios extra
+        $usuario->nombres = filter_var($request->nombres);
+        $usuario->apellidos = filter_var($request->apellidos);
         $usuario->rol = $request->rol;
         $usuario->contrasena = Hash::make($request->contrasena);
+
+        // Guardar usuario
         $usuario->save();
 
         return redirect()->route('usuario.index')->with('success', 'Usuario creado exitosamente.');
     }
+
 
     /**
      * Display the specified resource.
@@ -63,31 +67,27 @@ class UsuarioController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateusuarioRequest $request, $id)
+    public function update(UpdateusuarioRequest $request, $id_usuario)
     {
-        $usuario = Usuario::findOrFail($id);
+        $usuario = Usuario::findOrFail($id_usuario);
 
-        $request->validate([
-            'usuario' => 'required|string|max:255|unique:usuario,usuario,' . $usuario->id_usuario,
-            'nombres' => 'required|string|max:255',
-            'apellidos' => 'required|string|max:255',
-            'rol' => 'required|in:admin,editor,viewer',
-        ]);
-
-        $usuario->usuario = $request->usuario;
-        $usuario->nombres = $request->nombres;
-        $usuario->apellidos = $request->apellidos;
+        // Sanitización y actualización de datos
+        $usuario->usuario = trim($request->usuario);
+        $usuario->nombres = filter_var($request->nombres);
+        $usuario->apellidos = filter_var($request->apellidos);
         $usuario->rol = $request->rol;
 
-        // Si se envía una nueva contraseña, actualizarla
+        // Actualizar contraseña solo si se envió una nueva
         if ($request->filled('contrasena')) {
             $usuario->contrasena = Hash::make($request->contrasena);
         }
 
+        // Guardar cambios
         $usuario->save();
 
         return redirect()->route('usuario.index')->with('success', 'Usuario actualizado exitosamente.');
     }
+
 
 
     /**

@@ -6,7 +6,21 @@
     @php
         use Carbon\Carbon;
     @endphp
-        <!-- Mostrar errores de validación -->
+
+
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                title: '¡Éxito!',
+                text: '{{ session('success') }}',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            });
+        </script>
+    @endif
+
+
+    <!-- Mostrar errores de validación -->
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -16,6 +30,7 @@
             </ul>
         </div>
     @endif
+
 
     <div class="page-heading">
         <div class="page-title">
@@ -65,9 +80,9 @@
                                 <div class="col-sm-6">
                                     <h6>Buscar Acta de Matrimonio</h6>
                                     <div class="form-group position-relative has-icon-left">
-                                        <input type="text" class="form-control" id="buscar-acta" placeholder="Ingresar Nombres o Apellidos">
+                                        <input type="text" class="form-control" id="buscar-acta" placeholder="Ingresar primer Nombre y primer Apellido">
                                         <div class="form-control-icon">
-                                            <i class="bi bi-person"></i>
+                                            <i class="fa-solid fa-magnifying-glass"></i>
                                         </div>
                                     </div>
 
@@ -168,9 +183,11 @@
                                                 <div class="form-group has-icon-left">
                                                     <label for="first-name-icon">Nombres</label>
                                                     <div class="position-relative">
-                                                        <input type="text" class="form-control" name="nombres" placeholder="Nombres" required>
+                                                        <input type="text" class="form-control" name="nombres" placeholder="Nombres"
+                                                               required maxlength="255" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
+                                                               title="El campo solo puede contener letras y espacios.">
                                                         <div class="form-control-icon">
-                                                            <i class="bi bi-person"></i>
+                                                            <i class="fa-regular fa-user fa-sm"></i>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -179,9 +196,11 @@
                                                 <div class="form-group has-icon-left">
                                                     <label for="apellidos">Apellidos</label>
                                                     <div class="position-relative">
-                                                        <input type="text" class="form-control" name="apellidos" placeholder="Apellidos" required>
+                                                        <input type="text" class="form-control" name="apellidos" placeholder="Apellidos"
+                                                               required maxlength="255" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
+                                                               title="El campo solo puede contener letras y espacios.">
                                                         <div class="form-control-icon">
-                                                            <i class="bi bi-person"></i>
+                                                            <i class="fa-solid fa-signature fa-sm"></i>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -190,9 +209,12 @@
                                                 <div class="form-group has-icon-left">
                                                     <label for="f_nacimiento">Fecha de Nacimiento</label>
                                                     <div class="position-relative">
-                                                        <input type="text" id="f_nacimiento"  class="form-control" name="f_nacimiento" required>
+                                                        <input type="text" id="f_nacimiento"  class="form-control" name="f_nacimiento" required
+                                                               pattern="\d{2}/\d{2}/\d{4}"
+                                                               title="La fecha debe tener el formato dd/mm/yyyy.">
+
                                                         <div class="form-control-icon">
-                                                            <i class="bi bi-calendar"></i>
+                                                            <i class="fa-regular fa-calendar-days fa-sm"></i>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -203,9 +225,11 @@
                                                     <label for="ruta_doc">Documento (PDF)</label>
 
                                                     <div class="input-group mb-3">
-                                                        <label class="input-group-text" for="inputGroupFile01"><i
-                                                                class="bi bi-upload"></i></label>
-                                                        <input type="file" class="form-control" name="ruta_doc" accept="application/pdf" required>
+                                                        <label class="input-group-text" for="inputGroupFile01">
+                                                            <i class="fa-regular fa-file-pdf"></i>
+                                                        </label>
+                                                        <input type="file" class="form-control" name="ruta_doc" accept="application/pdf" required
+                                                               title="Solo se permite subir archivos en formato PDF.">
                                                     </div>
 
 
@@ -327,6 +351,8 @@
 
 
     </script>
+
+
 
 
 

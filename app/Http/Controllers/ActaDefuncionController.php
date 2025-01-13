@@ -43,28 +43,33 @@ class ActaDefuncionController extends Controller
         // Convertir la fecha al formato correcto
         $fechaNacimiento = Carbon::createFromFormat('d/m/Y', $request->f_nacimiento)->format('Y-m-d');
 
-        // Definir la carpeta del tipo de acta (acta_nacimiento)
+        // Definir la carpeta del tipo de acta (acta_defuncion)
         $actaType = 'acta_defuncion';
 
         // Crear el nombre de la carpeta basado en nombre y apellidos
         $folderName = $request->nombres . '_' . $request->apellidos;
 
-        // Crear el path completo dentro de acta_nacimiento para almacenar el archivo
-        $folderPath = "$actaType/$folderName/pdf";  // Esto crea storage/app/public/acta_nacimiento/nombre_apellido/pdf
+        // Crear el path completo dentro de acta_defuncion para almacenar el archivo
+        $folderPath = "$actaType/$folderName/pdf";
 
         // Subir el archivo PDF y obtener la ruta
         if ($request->hasFile('ruta_doc')) {
             $file = $request->file('ruta_doc');
-            $fileName = time() . '_' . $file->getClientOriginalName();  // Nombre único para evitar colisiones
-            $filePath = $file->storeAs($folderPath, $fileName, 'public');  // Especificamos el disco 'public'
+
+            // Crear un nombre único para el archivo: nombres_apellidos_identificador.pdf
+            $uniqueIdentifier = uniqid(); // O usar Str::uuid() para mayor unicidad
+            $fileExtension = $file->getClientOriginalExtension();
+            $fileName = "{$request->nombres}_{$request->apellidos}_{$uniqueIdentifier}.{$fileExtension}";
+
+            $filePath = $file->storeAs($folderPath, $fileName, 'public');
         }
 
         // Crear el nuevo registro
         $registro = new ActaDefuncion();
         $registro->nombres = $request->nombres;
         $registro->apellidos = $request->apellidos;
-        $registro->f_nacimiento = $fechaNacimiento;  // Almacenar la fecha convertida
-        $registro->ruta_doc = $filePath;  // Almacenar solo la ruta en la BD
+        $registro->f_nacimiento = $fechaNacimiento; // Almacenar la fecha convertida
+        $registro->ruta_doc = $filePath; // Almacenar solo la ruta en la BD
         $registro->id_usuario = auth()->user()->id_usuario;
         $registro->save();
 
@@ -101,12 +106,12 @@ class ActaDefuncionController extends Controller
         // Convertir la fecha al formato correcto
         $fechaNacimiento = Carbon::createFromFormat('d/m/Y', $request->f_nacimiento)->format('Y-m-d');
 
-        // Definir la carpeta del tipo de acta (acta_nacimiento)
+        // Definir la carpeta del tipo de acta (acta_defuncion)
         $actaType = 'acta_defuncion';
 
         // Crear el nombre de la carpeta basado en nombre y apellidos
         $folderName = $request->nombres . '_' . $request->apellidos;
-        $folderPath = "$actaType/$folderName/pdf"; // Estructura: acta_nacimiento/nombre_apellido/pdf
+        $folderPath = "$actaType/$folderName/pdf";
 
         // Subir el archivo PDF y obtener la ruta si se ha subido un nuevo archivo
         if ($request->hasFile('ruta_doc')) {
@@ -116,21 +121,27 @@ class ActaDefuncionController extends Controller
             }
 
             $file = $request->file('ruta_doc');
-            $fileName = time() . '_' . $file->getClientOriginalName();
+
+            // Crear un nombre único para el archivo: nombres_apellidos_identificador.pdf
+            $uniqueIdentifier = uniqid(); // O usar Str::uuid() para mayor unicidad
+            $fileExtension = $file->getClientOriginalExtension();
+            $fileName = "{$request->nombres}_{$request->apellidos}_{$uniqueIdentifier}.{$fileExtension}";
+
             $filePath = $file->storeAs($folderPath, $fileName, 'public');
-            $registro->ruta_doc = $filePath;  // Guardar la nueva ruta del archivo
+            $registro->ruta_doc = $filePath; // Guardar la nueva ruta del archivo
         }
 
         // Actualizar los campos del registro
         $registro->nombres = $request->nombres;
         $registro->apellidos = $request->apellidos;
         $registro->f_nacimiento = $fechaNacimiento;
-        $registro->id_usuario = auth()->user()->id_usuario;  // ID del usuario que hizo la actualización
+        $registro->id_usuario = auth()->user()->id_usuario; // ID del usuario que hizo la actualización
         $registro->save();
 
         return redirect()->route('defuncion.edit', ['defuncion' => $id])
             ->with('success', 'Registro actualizado exitosamente.');
     }
+
 
     /**
      * Remove the specified resource from storage.

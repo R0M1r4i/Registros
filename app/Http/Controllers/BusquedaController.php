@@ -23,40 +23,33 @@ class BusquedaController extends Controller
     public function buscarActaNacimiento(Request $request)
     {
         $query = $request->input('query');
+        $baseQuery = DB::table('acta_nacimiento')
+            ->select('id', 'nombres', 'apellidos', 'f_nacimiento as fecha');
 
         if ($query) {
-            // Dividir el término de búsqueda en palabras (nombres y apellidos)
-            $terms = explode(' ', $query);
+            $terminos = array_filter(explode(' ', trim($query)));
 
-            // Construir la consulta para combinar nombres y apellidos
-            $resultadosNacimiento = DB::table('acta_nacimiento')
-                ->select('id', 'nombres', 'apellidos', 'f_nacimiento as fecha')
-                ->when(count($terms) > 1, function ($query) use ($terms) {
-                    // Si hay dos términos, buscar como nombre y apellido
-                    return $query->where('nombres', 'LIKE', "%{$terms[0]}%")
-                        ->where('apellidos', 'LIKE', "%{$terms[1]}%");
-                }, function ($query) use ($terms) {
-                    // Si solo hay un término, buscar en ambos campos
-                    return $query->where('nombres', 'LIKE', "%{$terms[0]}%")
-                        ->orWhere('apellidos', 'LIKE', "%{$terms[0]}%");
-                })
-                ->paginate(10);
+            if (count($terminos) > 1) {
+                // Uso de whereRaw para mejor uso del índice
+                $baseQuery->whereRaw('LOWER(nombres) LIKE ?', ['%' . strtolower($terminos[0]) . '%'])
+                    ->whereRaw('LOWER(apellidos) LIKE ?', ['%' . strtolower($terminos[1]) . '%']);
+            } else {
+                $terminoBusqueda = strtolower($terminos[0]);
+                $baseQuery->where(function($q) use ($terminoBusqueda) {
+                    $q->whereRaw('LOWER(nombres) LIKE ?', ['%' . $terminoBusqueda . '%'])
+                        ->orWhereRaw('LOWER(apellidos) LIKE ?', ['%' . $terminoBusqueda . '%']);
+                });
+            }
         } else {
-            // Mostrar los primeros 10 registros cuando no hay búsqueda
-            $resultadosNacimiento = DB::table('acta_nacimiento')
-                ->select('id', 'nombres', 'apellidos', 'f_nacimiento as fecha')
-                ->orderBy('id', 'desc')
-                ->paginate(10);
+            $baseQuery->latest('id');
         }
 
-        // Formatear la fecha de nacimiento
-        $resultadosNacimiento->getCollection()->transform(function ($item) {
+        $resultados = $baseQuery->paginate(10);
+
+        return response()->json($resultados->through(function ($item) {
             $item->fecha = \Carbon\Carbon::parse($item->fecha)->format('d/m/Y');
             return $item;
-        });
-
-        // Devolver resultados en formato JSON
-        return response()->json($resultadosNacimiento);
+        }));
     }
 
 

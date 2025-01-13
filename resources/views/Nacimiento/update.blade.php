@@ -31,7 +31,7 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="stats-icon purple">
-                                            <i class="iconly-boldShow"></i>
+                                            <i class="fa-solid fa-user"></i>
                                         </div>
                                     </div>
                                     <div class="col-md-9">
@@ -49,7 +49,7 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="stats-icon green">
-                                            <i class="iconly-boldAdd-User"></i>
+                                            <i class="fa-solid fa-file"></i>
                                         </div>
                                     </div>
                                     <div class="col-md-9">
@@ -67,7 +67,7 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="stats-icon blue">
-                                            <i class="iconly-boldProfile"></i>
+                                            <i class="fa-solid fa-calendar-days"></i>
                                         </div>
                                     </div>
                                     <div class="col-md-9">
@@ -84,7 +84,7 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="stats-icon red">
-                                            <i class="iconly-boldBookmark"></i>
+                                            <i class="fa-solid fa-list-check"></i>
                                         </div>
                                     </div>
                                     <div class="col-md-9">
@@ -147,17 +147,25 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="nombres">Nombres</label>
-                            <input type="text" name="nombres" class="form-control" value="{{ $nacimiento->nombres }}" required>
+                            <input type="text" name="nombres" class="form-control" value="{{ $nacimiento->nombres }}" required
+                                   maxlength="255" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
+                                   title="El campo solo puede contener letras y espacios."
+                            >
                         </div>
 
                         <div class="form-group">
                             <label for="apellidos">Apellidos</label>
-                            <input type="text" name="apellidos" class="form-control" value="{{ $nacimiento->apellidos }}" required>
+                            <input type="text" name="apellidos" class="form-control" value="{{ $nacimiento->apellidos }}" required
+                                   maxlength="255" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+"
+                                   title="El campo solo puede contener letras y espacios."
+                            >
                         </div>
 
                         <div class="form-group">
                             <label for="f_nacimiento">Fecha de Nacimiento</label>
-                            <input type="text" id="f_nacimiento" name="f_nacimiento" class="form-control" value="{{ old('f_nacimiento', \Carbon\Carbon::parse($nacimiento->f_nacimiento)->format('d/m/Y')) }}" required>
+                            <input type="text" id="f_nacimiento" name="f_nacimiento" class="form-control" value="{{ old('f_nacimiento', \Carbon\Carbon::parse($nacimiento->f_nacimiento)->format('d/m/Y')) }}" required
+                                   pattern="\d{2}/\d{2}/\d{4}"
+                                   title="La fecha debe tener el formato dd/mm/yyyy.">
                         </div>
 
 

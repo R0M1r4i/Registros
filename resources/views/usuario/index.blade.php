@@ -53,24 +53,6 @@
                             </button>
                         </div>
 
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-12">
-
-                                </div>
-                                <div class="col-sm-6">
-                                    <h6>Buscar Usuario</h6>
-                                    <div class="form-group position-relative has-icon-left">
-                                        <input type="text" class="form-control"
-                                               placeholder="Ingresar Nombres y Apellidos">
-                                        <div class="form-control-icon">
-                                            <i class="bi bi-person"></i>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
 
 
 
@@ -111,7 +93,9 @@
                                                             </div>
                                                             <form action="{{ route('usuario.update', $usuario->id_usuario) }}" method="POST">
                                                                 @csrf
+                                                                @method('PUT')
                                                                 <div class="modal-body">
+
                                                                     <div class="form-group">
                                                                         <label for="usuario">Usuario</label>
                                                                         <input type="text" class="form-control" name="usuario" value="{{ $usuario->usuario }}" required>
@@ -129,13 +113,28 @@
                                                                         <select name="rol" class="form-select" required>
                                                                             <option value="admin" {{ $usuario->rol == 'admin' ? 'selected' : '' }}>Administrador</option>
                                                                             <option value="editor" {{ $usuario->rol == 'editor' ? 'selected' : '' }}>Editor</option>
-                                                                            <option value="viewer" {{ $usuario->rol == 'viewer' ? 'selected' : '' }}>Visualizador</option>
                                                                         </select>
                                                                     </div>
-                                                                    <div class="form-group">
-                                                                        <label for="contrasena">Contraseña (Opcional)</label>
-                                                                        <input type="password" class="form-control" name="contrasena">
+                                                                    <div class="form-group position-relative">
+                                                                        <label for="contrasena2">Contraseña (Opcional)</label>
+                                                                        <div class="input-group">
+                                                                            <input type="password" class="form-control" name="contrasena" id="contrasena2">
+                                                                            <button type="button" class="btn btn-outline-secondary" id="togglePassword2">
+                                                                                <i class="fas fa-eye"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                        <small class="form-text text-muted">
+                                                                            La contraseña debe cumplir con:
+                                                                            <ul id="password-rules-edit">
+                                                                                <li id="rule-length-edit">❌ Tener al menos 8 caracteres.</li>
+                                                                                <li id="rule-uppercase-edit">❌ Incluir una letra mayúscula.</li>
+                                                                                <li id="rule-lowercase-edit">❌ Incluir una letra minúscula.</li>
+                                                                                <li id="rule-number-edit">❌ Incluir un número.</li>
+                                                                                <li id="rule-symbol-edit">❌ Incluir un símbolo (por ejemplo: @, #, $).</li>
+                                                                            </ul>
+                                                                        </small>
                                                                     </div>
+
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -188,13 +187,28 @@
                             <select name="rol" class="form-select" required>
                                 <option value="admin">Administrador</option>
                                 <option value="editor">Editor</option>
-                                <option value="viewer">Visualizador</option>
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group position-relative">
                             <label for="contrasena">Contraseña</label>
-                            <input type="password" class="form-control" name="contrasena" required>
+                            <div class="input-group">
+                                <input type="password" class="form-control" name="contrasena" id="contrasena" required>
+                                <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <small class="form-text text-muted">
+                                La contraseña debe cumplir con:
+                                <ul id="password-rules">
+                                    <li id="rule-length-creation">❌ Tener al menos 8 caracteres.</li>
+                                    <li id="rule-uppercase-creation">❌ Incluir una letra mayúscula.</li>
+                                    <li id="rule-lowercase-creation">❌ Incluir una letra minúscula.</li>
+                                    <li id="rule-number-creation">❌ Incluir un número.</li>
+                                    <li id="rule-symbol-creation">❌ Incluir un símbolo (por ejemplo: @, #, $).</li>
+                                </ul>
+                            </small>
                         </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -204,6 +218,72 @@
             </div>
         </div>
     </div>
+
+
+
+
+
+    <script>
+        // Validación para el formulario de creación
+        const passwordInputCreation = document.getElementById('contrasena');
+        const passwordRulesCreation = {
+            length: document.getElementById('rule-length-creation'),
+            uppercase: document.getElementById('rule-uppercase-creation'),
+            lowercase: document.getElementById('rule-lowercase-creation'),
+            number: document.getElementById('rule-number-creation'),
+            symbol: document.getElementById('rule-symbol-creation'),
+        };
+
+        passwordInputCreation.addEventListener('input', function () {
+            const password = this.value;
+
+            passwordRulesCreation.length.textContent = password.length >= 8 ? '✅ Tener al menos 8 caracteres.' : '❌ Tener al menos 8 caracteres.';
+            passwordRulesCreation.uppercase.textContent = /[A-Z]/.test(password) ? '✅ Incluir una letra mayúscula.' : '❌ Incluir una letra mayúscula.';
+            passwordRulesCreation.lowercase.textContent = /[a-z]/.test(password) ? '✅ Incluir una letra minúscula.' : '❌ Incluir una letra minúscula.';
+            passwordRulesCreation.number.textContent = /[0-9]/.test(password) ? '✅ Incluir un número.' : '❌ Incluir un número.';
+            passwordRulesCreation.symbol.textContent = /[!@#$%^&*(),.?":{}|<>]/.test(password) ? '✅ Incluir un símbolo.' : '❌ Incluir un símbolo.';
+        });
+
+        // Validación para el formulario de edición
+        const passwordInputEdit = document.getElementById('contrasena2');
+        const passwordRulesEdit = {
+            length: document.getElementById('rule-length-edit'),
+            uppercase: document.getElementById('rule-uppercase-edit'),
+            lowercase: document.getElementById('rule-lowercase-edit'),
+            number: document.getElementById('rule-number-edit'),
+            symbol: document.getElementById('rule-symbol-edit'),
+        };
+
+        passwordInputEdit.addEventListener('input', function () {
+            const password = this.value;
+
+            passwordRulesEdit.length.textContent = password.length >= 8 ? '✅ Tener al menos 8 caracteres.' : '❌ Tener al menos 8 caracteres.';
+            passwordRulesEdit.uppercase.textContent = /[A-Z]/.test(password) ? '✅ Incluir una letra mayúscula.' : '❌ Incluir una letra mayúscula.';
+            passwordRulesEdit.lowercase.textContent = /[a-z]/.test(password) ? '✅ Incluir una letra minúscula.' : '❌ Incluir una letra minúscula.';
+            passwordRulesEdit.number.textContent = /[0-9]/.test(password) ? '✅ Incluir un número.' : '❌ Incluir un número.';
+            passwordRulesEdit.symbol.textContent = /[!@#$%^&*(),.?":{}|<>]/.test(password) ? '✅ Incluir un símbolo.' : '❌ Incluir un símbolo.';
+        });
+
+        // Mostrar/Ocultar contraseñas
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const icon = this.querySelector('i');
+            const input = document.getElementById('contrasena');
+            input.type = input.type === 'password' ? 'text' : 'password';
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
+
+        document.getElementById('togglePassword2').addEventListener('click', function () {
+            const icon = this.querySelector('i');
+            const input = document.getElementById('contrasena2');
+            input.type = input.type === 'password' ? 'text' : 'password';
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
+    </script>
+
+
+
 
 @endsection
 
