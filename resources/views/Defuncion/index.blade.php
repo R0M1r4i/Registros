@@ -117,6 +117,7 @@
                                         <th>Nombres</th>
                                         <th>Apellidos</th>
                                         <th>Fecha de Nacimiento</th>
+                                        <th>Libro</th>
                                         <th>Detalles</th>
                                     </tr>
                                     </thead>
@@ -127,6 +128,7 @@
                                             <td class="text-bold-500">{{ $defuncion->nombres }}</td>
                                             <td>{{ $defuncion->apellidos }}</td>
                                             <td class="text-bold-500">{{ \Carbon\Carbon::parse($defuncion->f_nacimiento)->format('d/m/Y') }}</td>
+                                            <td class="text-bold-500">  Libro 1 </td>
                                             <td>
                                                 <div class="buttons">
                                                     <a href="{{ route('defuncion.edit', $defuncion->id) }}" class="btn icon icon-left btn-primary">
@@ -136,6 +138,7 @@
                                             </td>
                                         </tr>
                                     @endforeach
+
                                     </tbody>
                                 </table>
                             </div>

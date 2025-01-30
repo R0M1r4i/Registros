@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreActaDefuncionRequest;
 use App\Http\Requests\UpdateActaDefuncionRequest;
 
+use App\Models\libro;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -19,11 +20,13 @@ class ActaDefuncionController extends Controller
     public function index()
     {
 
+        $libros = libro::all();
+
         $totalDefunsiones = DB::table('acta_defuncion')->count();
 
         $defunciones = ActaDefuncion::take(10)->get();
 
-        return view('defuncion.index', compact('defunciones','totalDefunsiones'));
+        return view('defuncion.index', compact('defunciones','totalDefunsiones', 'libros'));
 
     }
 

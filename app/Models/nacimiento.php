@@ -41,6 +41,11 @@ class nacimiento extends Model
         });
     }
 
+    public function  libro()
+    {
+        return $this->belongsTo(libro::class, 'id_libro', 'id_libro');
+    }
+
     // Función para crear el log
     public function crearLog($accion)
     {

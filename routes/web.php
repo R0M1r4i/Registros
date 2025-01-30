@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\ActaDefuncionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LibroController;
 use App\Http\Controllers\MatrimonioController;
 use App\Http\Controllers\NacimientoController;
+
 
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
@@ -51,6 +53,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Rutas para el editor (solo registros)
     Route::middleware(['role:editor'])->group(function () {
+
         Route::resource('nacimiento', NacimientoController::class)->only(['index', 'create', 'store', 'edit', 'update']);
 
         Route::resource('matrimonio', MatrimonioController::class)->only(['index', 'create', 'store', 'edit', 'update']);
@@ -71,6 +74,8 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('usuario', UsuarioController::class);
 
         Route::get('/logs', [LogController::class, 'index'])->name('logs.index');
+
+      Route::resource('libro', LibroController::class)->only(['index', 'create', 'store', 'edit', 'update']);
     });
 
     // Ruta para el logout

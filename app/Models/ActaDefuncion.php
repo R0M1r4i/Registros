@@ -35,6 +35,10 @@ class ActaDefuncion extends Model
         });
     }
 
+    public function  libro()
+    {
+        return $this->belongsTo(libro::class, 'id_libro', 'id_libro');
+    }
     public function crearLog($accion)
     {
         $cambios = $accion === 'crear' ? json_encode($this->getAttributes()) : json_encode($this->getChanges());

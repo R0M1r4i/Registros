@@ -188,6 +188,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+
                                             <div class="col-12">
                                                 <div class="form-group has-icon-left">
                                                     <label for="apellidos">Apellidos</label>
@@ -201,6 +202,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+
                                             <div class="col-12">
                                                 <div class="form-group has-icon-left">
                                                     <label for="f_nacimiento">Fecha de Nacimiento</label>
@@ -214,6 +216,19 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="id_libro">Seleccionar Libro</label>
+                                                    <select name="id_libro" id="id_libro" class="form-select" required>
+                                                        <option value="">Seleccione un libro</option>
+                                                        @foreach ($libros as $libro)
+                                                            <option value="{{ $libro->id_libro }}">{{ $libro->nombre_libro }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
 
                                             <div class="col-12">
                                                 <div class="form-group ">

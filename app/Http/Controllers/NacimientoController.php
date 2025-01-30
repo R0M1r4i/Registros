@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\libro;
 use App\Models\nacimiento;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorenacimientoRequest;
@@ -21,9 +22,10 @@ class NacimientoController extends Controller
 
         $totalNacimientos = DB::table('acta_nacimiento')->count();
 
+        $libros = libro::all();
         $nacimientos = nacimiento::take(10)->get();
 
-        return view('nacimiento.index', compact('nacimientos','totalNacimientos'));
+        return view('nacimiento.index', compact('nacimientos','totalNacimientos', 'libros'));
     }
 
     /**
@@ -70,6 +72,7 @@ class NacimientoController extends Controller
         $registro->f_nacimiento = $fechaNacimiento; // Almacenar la fecha convertida
         $registro->ruta_doc = $filePath; // Almacenar solo la ruta en la BD
         $registro->id_usuario = auth()->user()->id_usuario;
+        $registro->id_libro = $request->id_libro; // Relacionar el acta con el libro
         $registro->save();
 
         return redirect()->route('nacimiento.index')->with('success', 'Registro creado exitosamente.');
@@ -90,8 +93,9 @@ class NacimientoController extends Controller
     public function edit( $id)
     {
         $nacimiento = nacimiento::findOrFail($id);  // Obtener el registro
+        $libros = libro::all();
 
-        return view('nacimiento.update', compact('nacimiento', ));
+        return view('nacimiento.update', compact('nacimiento','libros' ));
 
     }
 
@@ -136,6 +140,8 @@ class NacimientoController extends Controller
         $registro->apellidos = $request->apellidos;
         $registro->f_nacimiento = $fechaNacimiento;
         $registro->id_usuario = auth()->user()->id_usuario; // ID del usuario que hizo la actualización
+        $registro->id_libro = $request->id_libro; // Relacionar el acta con el libro
+
         $registro->save();
 
         return redirect()->route('nacimiento.edit', ['nacimiento' => $id])

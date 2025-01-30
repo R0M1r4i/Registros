@@ -112,6 +112,23 @@
                     <!-- Menú de Logs (accesible solo para admin) -->
                     @if(auth()->check() && auth()->user()->rol === 'admin')
 
+
+                        <li class="sidebar-title">Libros</li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="fa-solid fa-book-bookmark fa-lg"></i>
+                                <span>Libros</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li class="submenu-item ">
+                                    <a href="{{ route('libro.index') }}">Registro de Libros</a>
+                                </li>
+
+
+                            </ul>
+                        </li>
+
                     <li class="sidebar-title">Auditoria</li>
 
                     <li class="sidebar-item  has-sub">

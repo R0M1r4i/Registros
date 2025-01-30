@@ -55,11 +55,13 @@ class Handler extends ExceptionHandler
         });
     }
 
-    public function render($request, Throwable $exception)
-    {
-        // Redirigir a la vista personalizada para todos los errores
-        return response()->view('error.index', ['error' => $exception->getMessage()], 500);
-    }
+    //Redireccion de errores
+
+//    public function render($request, Throwable $exception)
+//    {
+//        // Redirigir a la vista personalizada para todos los errores
+//        return response()->view('error.index', ['error' => $exception->getMessage()], 500);
+//    }
 
 
 }

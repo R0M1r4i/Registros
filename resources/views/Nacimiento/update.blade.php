@@ -78,6 +78,8 @@
                             </div>
                         </div>
                     </div>
+
+
                     <div class="col-6 col-lg-3 col-md-6">
                         <div class="card">
                             <div class="card-body px-3 py-4-5">
@@ -88,13 +90,16 @@
                                         </div>
                                     </div>
                                     <div class="col-md-9">
-                                        <h6 class="text-muted font-semibold">Último Registro</h6>
-                                        <h6 class="font-extrabold mb-0">{{ Carbon::parse($nacimiento->updated_at)->format('d/m/Y H:i:s') }}</h6>
+                                        <h6 class="text-muted font-semibold">Libro</h6>
+                                        <h6 class="font-extrabold mb-0">
+                                            {{ $nacimiento->libro ? $nacimiento->libro->nombre_libro : 'No asignado' }}
+                                        </h6>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
                 <a href="{{ Storage::url($nacimiento->ruta_doc) }}" target="_blank" class="btn btn-secondary">
@@ -167,6 +172,19 @@
                                    pattern="\d{2}/\d{2}/\d{4}"
                                    title="La fecha debe tener el formato dd/mm/yyyy.">
                         </div>
+
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="id_libro">Seleccionar Libro</label>
+                                <select name="id_libro" id="id_libro" class="form-select" required>
+                                    <option value="">Seleccione un libro</option>
+                                    @foreach ($libros as $libro)
+                                        <option value="{{ $libro->id_libro }}">{{ $libro->nombre_libro }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
 
 
                         <div class="form-group">
