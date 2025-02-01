@@ -26,6 +26,7 @@ class ActaDefuncionController extends Controller
 
         $defunciones = ActaDefuncion::take(10)->get();
 
+
         return view('defuncion.index', compact('defunciones','totalDefunsiones', 'libros'));
 
     }
@@ -73,7 +74,9 @@ class ActaDefuncionController extends Controller
         $registro->apellidos = $request->apellidos;
         $registro->f_nacimiento = $fechaNacimiento; // Almacenar la fecha convertida
         $registro->ruta_doc = $filePath; // Almacenar solo la ruta en la BD
+        $registro->id_libro = $request->id_libro; // Relacionar el acta con el libro
         $registro->id_usuario = auth()->user()->id_usuario;
+
         $registro->save();
 
         return redirect()->route('defuncion.index')->with('success', 'Registro creado exitosamente.');
@@ -93,9 +96,10 @@ class ActaDefuncionController extends Controller
     public function edit($id)
     {
         $defuncion = ActaDefuncion::findOrFail($id);  // Obtener el registro
+        $libros = libro::all();
 
 
-        return view('defuncion.update', compact('defuncion'));
+        return view('defuncion.update', compact('defuncion','libros'));
     }
 
     /**
@@ -138,6 +142,7 @@ class ActaDefuncionController extends Controller
         $registro->nombres = $request->nombres;
         $registro->apellidos = $request->apellidos;
         $registro->f_nacimiento = $fechaNacimiento;
+        $registro->id_libro = $request->id_libro; // Relacionar el acta con el libro
         $registro->id_usuario = auth()->user()->id_usuario; // ID del usuario que hizo la actualización
         $registro->save();
 

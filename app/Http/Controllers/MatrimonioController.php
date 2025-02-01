@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\libro;
 use App\Models\Matrimonio;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMatrimonioRequest;
@@ -27,9 +28,10 @@ class MatrimonioController extends Controller
     public function index()
     {
         $totalMatrimonio = DB::table('acta_matrimonio')->count();
+        $libros = libro::all();
         $matrimonios = Matrimonio::take(10)->get();
 
-        return view('matrimonio.index', compact('matrimonios','totalMatrimonio'));
+        return view('matrimonio.index', compact('matrimonios','totalMatrimonio', 'libros'));
 
     }
 
@@ -78,6 +80,7 @@ class MatrimonioController extends Controller
         $registro->apellidos = $request->apellidos;
         $registro->f_nacimiento = $fechaNacimiento; // Almacenar la fecha convertida
         $registro->ruta_doc = $filePath; // Almacenar solo la ruta en la BD
+        $registro->id_libro = $request->id_libro; //relacion acta libro
         $registro->id_usuario = auth()->user()->id_usuario;
         $registro->save();
 
@@ -100,8 +103,9 @@ class MatrimonioController extends Controller
     public function edit( $id)
     {
         $matrimonio = Matrimonio::findOrFail($id);  // Obtener el registro
+        $libros = libro::all();
 
-        return view('matrimonio.update', compact('matrimonio', ));
+        return view('matrimonio.update', compact('matrimonio', 'libros' ));
     }
 
     /**
@@ -145,6 +149,7 @@ class MatrimonioController extends Controller
         $registro->nombres = $request->nombres;
         $registro->apellidos = $request->apellidos;
         $registro->f_nacimiento = $fechaNacimiento;
+        $registro->id_libro = $request->id_libro; //relacion acta libro
         $registro->id_usuario = auth()->user()->id_usuario; // ID del usuario que hizo la actualización
         $registro->save();
 

@@ -117,7 +117,6 @@
                                         <th>Nombres</th>
                                         <th>Apellidos</th>
                                         <th>Fecha de Nacimiento</th>
-                                        <th>Libro</th>
                                         <th>Detalles</th>
                                     </tr>
                                     </thead>
@@ -216,6 +215,18 @@
                                                             <i class="fa-regular fa-calendar-days fa-sm"></i>
                                                         </div>
                                                     </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label for="id_libro">Seleccionar Libro</label>
+                                                    <select name="id_libro" id="id_libro" class="form-select" required>
+                                                        <option value="">Seleccione un libro</option>
+                                                        @foreach ($libros as $libro)
+                                                            <option value="{{ $libro->id_libro }}">{{ $libro->nombre_libro }}</option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                             </div>
 
